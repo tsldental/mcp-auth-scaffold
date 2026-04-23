@@ -110,8 +110,6 @@ That is the key bridge between an unauthenticated MCP request and an Entra-aware
 
 The generated server pairs naturally with `MCP-AgentXRay`, which lets you watch the handshake instead of guessing where it failed.
 
-![MCP-AgentXRay dashboard showing the MCP auth handshake](./media/agentxray-dashboard.png)
-
 In the dashboard, you can see:
 
 - the incoming MCP request
