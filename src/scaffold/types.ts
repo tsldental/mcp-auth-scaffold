@@ -25,6 +25,8 @@ export interface InitAnswers {
 
 export interface TemplateContext {
   PROJECT_NAME: string;
+  PROJECT_SLUG: string;
+  ENTRA_APP_DISPLAY_NAME: string;
   TENANT_ID: string;
   CLIENT_ID: string;
   AUDIENCE: string;

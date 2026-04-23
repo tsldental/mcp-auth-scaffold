@@ -27,6 +27,7 @@ Run one command and the scaffold creates an Azure Functions MCP server that alre
 - `/.well-known/oauth-authorization-server`
 - bearer token extraction
 - JWT validation against Microsoft Entra JWKS
+- `azure.yaml` and an `infra/` folder with Bicep for the Function App plus optional Entra app registration scaffolding
 - a protected MCP endpoint
 - a protected REST smoke-test endpoint
 - sample tool logic so the generated app is immediately testable
@@ -171,6 +172,11 @@ The CLI asks for the minimum set of auth values needed to scaffold the server:
 ## What the generated project looks like
 
 ```text
+infra/
+  entra-app-registration.bicep
+  main.bicep
+  main.parameters.json
+azure.yaml
 src/
   auth/
     challenge.ts
@@ -191,6 +197,9 @@ README.md
 
 | File | Purpose |
 |---|---|
+| `azure.yaml` | Wires the generated app into Azure Developer CLI (`azd`) |
+| `infra/main.bicep` | Creates the Function App, hosting plan, storage account, Insights, and app settings |
+| `infra/entra-app-registration.bicep` | Optional Entra app registration scaffolding for tenant-side bootstrap |
 | `src/auth/challenge.ts` | Builds the `401` response and `WWW-Authenticate` header |
 | `src/auth/prm.ts` | Exposes protected resource metadata and auth server metadata |
 | `src/auth/token.ts` | Extracts and validates bearer tokens against Entra JWKS |
@@ -238,6 +247,17 @@ http://localhost:3000/__inspector
 ```
 
 Now send a request to the generated MCP server through AgentXRay and inspect the `401` + PRM flow visually.
+
+## Infrastructure scaffold
+
+Each generated project now includes a deployment starter kit:
+
+- `azure.yaml` for `azd`
+- `infra/main.bicep` for Azure resources
+- `infra/main.parameters.json` for starter values
+- `infra/entra-app-registration.bicep` for optional Entra app bootstrap
+
+That means the scaffold is no longer just "application code only" — it now also gives the developer a first-pass Azure deployment blueprint.
 
 ## What still needs real Azure configuration
 

@@ -7,6 +7,7 @@ This project was scaffolded by `mcp-auth-scaffold` to wrap a Node.js MCP server 
 - `401 Unauthorized` challenge responses with `WWW-Authenticate` metadata for MCP/OAuth discovery.
 - `/.well-known/oauth-protected-resource` and `/.well-known/oauth-authorization-server` endpoints.
 - JWT bearer token validation against Microsoft Entra issuer metadata and JWKS.
+- `azure.yaml` plus an `infra/` folder with Bicep for the Function App and experimental Entra app-registration scaffolding.
 - A protected MCP endpoint at `{{MCP_ROUTE}}`.
 - A protected REST smoke-test endpoint at `{{SAMPLE_REST_ROUTE}}`.
 {{SAMPLE_TOOL_README}}
@@ -39,6 +40,25 @@ npm install
    node dist/index.js verify http://localhost:7071
    ```
 
+## Infra scaffold
+
+The generated project includes:
+
+- `azure.yaml` for Azure Developer CLI deployment wiring
+- `infra/main.bicep` for the Function App, storage account, hosting plan, and app settings
+- `infra/entra-app-registration.bicep` for optional Entra app registration scaffolding
+- `infra/main.parameters.json` with starter deployment values
+
+If you want the Bicep to attempt Entra app registration during deployment, set:
+
+```json
+"deployEntraAppRegistration": {
+  "value": true
+}
+```
+
+in `infra/main.parameters.json`.
+
 ## Required Azure / Entra setup
 
 You still need to finish the tenant-side configuration that only Azure can perform:
@@ -49,6 +69,8 @@ You still need to finish the tenant-side configuration that only Azure can perfo
 4. Register or identify the client application that will call the MCP server.
 5. Grant tenant consent so the client can request that scope.
 6. Copy the same values into Azure Functions app settings when you deploy.
+
+If you opt into the generated `infra/entra-app-registration.bicep`, treat it as an accelerator rather than a guaranteed one-click tenant setup. It assumes the deploying identity has permission to create and update Entra applications.
 
 ## Auth handshake behavior
 
@@ -67,6 +89,16 @@ That allows MCP-aware clients to discover how to obtain an Entra token before re
 3. Fetch `/.well-known/oauth-protected-resource` and `/.well-known/oauth-authorization-server`.
 4. Acquire a token for `{{AUDIENCE}}` with scope `{{SCOPE}}`.
 5. Retry with `Authorization: Bearer <token>` and confirm the MCP handshake succeeds.
+
+## Deploy with Azure Developer CLI
+
+```bash
+azd env new <environment-name>
+azd provision
+azd deploy
+```
+
+The generated `azure.yaml` points `azd` at the local project and the `infra/` folder so the code scaffold and infra scaffold stay aligned.
 
 ## Files to review first
 

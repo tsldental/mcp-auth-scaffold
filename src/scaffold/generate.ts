@@ -20,9 +20,12 @@ function createTemplateContext(answers: InitAnswers): TemplateContext {
   const mcpRoute = `${answers.basePath}/mcp` || "/mcp";
   const sampleRestRoute = `${answers.basePath}/api/sample-status` || "/api/sample-status";
   const basePathWithoutLeadingSlash = answers.basePath.replace(/^\//, "");
+  const projectSlug = slugifyProjectName(answers.projectName);
 
   return {
     PROJECT_NAME: answers.projectName,
+    PROJECT_SLUG: projectSlug,
+    ENTRA_APP_DISPLAY_NAME: `${answers.projectName} MCP Server`,
     TENANT_ID: answers.tenantId,
     CLIENT_ID: answers.clientId,
     AUDIENCE: answers.audience,
@@ -39,6 +42,14 @@ function createTemplateContext(answers: InitAnswers): TemplateContext {
       ? "- `get-ski-conditions` sample MCP tool so you can validate the secured handshake immediately."
       : "- no sample MCP tool by default; add your own `server.tool(...)` registrations in `src/index.ts`.",
   };
+}
+
+function slugifyProjectName(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "") || "secure-mcp-server";
 }
 
 function buildSampleToolRegistration(): string {

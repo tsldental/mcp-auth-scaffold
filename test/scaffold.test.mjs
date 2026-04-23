@@ -37,18 +37,29 @@ test("init generates a secure Azure Functions MCP scaffold", () => {
     );
     const generatedPrm = readFileSync(path.join(outputDirectory, "src", "auth", "prm.ts"), "utf8");
     const generatedConfig = readFileSync(path.join(outputDirectory, "src", "config.ts"), "utf8");
+    const generatedAzureYaml = readFileSync(path.join(outputDirectory, "azure.yaml"), "utf8");
+    const generatedMainBicep = readFileSync(path.join(outputDirectory, "infra", "main.bicep"), "utf8");
+    const generatedEntraBicep = readFileSync(
+      path.join(outputDirectory, "infra", "entra-app-registration.bicep"),
+      "utf8",
+    );
 
     assert.equal(existsSync(path.join(outputDirectory, "host.json")), true);
     assert.equal(existsSync(path.join(outputDirectory, "function-route", "function.json")), true);
+    assert.equal(existsSync(path.join(outputDirectory, "infra", "main.parameters.json")), true);
     assert.match(generatedIndex, /\.well-known\/oauth-protected-resource/);
     assert.match(generatedChallenge, /WWW-Authenticate/);
     assert.match(generatedChallenge, /realm=/);
     assert.match(generatedIndex, /get-ski-conditions/);
     assert.match(generatedReadme, /MCP-AgentXRay/);
+    assert.match(generatedReadme, /infra\/main\.bicep/);
     assert.match(generatedReadme, /node dist\/index\.js verify http:\/\/localhost:7071/);
     assert.match(generatedLocalSettings, /AZURE_TENANT_ID/);
     assert.match(generatedPrm, /code_challenge_methods_supported/);
     assert.match(generatedConfig, /codeChallengeMethodsSupported/);
+    assert.match(generatedAzureYaml, /host: function/);
+    assert.match(generatedMainBicep, /deployEntraAppRegistration/);
+    assert.match(generatedEntraBicep, /deploymentScripts/);
   } finally {
     rmSync(tempRoot, { recursive: true, force: true });
   }
