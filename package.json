@@ -1,0 +1,36 @@
+{
+  "name": "mcp-auth-scaffold",
+  "version": "0.1.0",
+  "description": "CLI scaffolder for Azure Functions MCP servers with Entra-aware auth plumbing.",
+  "main": "dist/index.js",
+  "bin": {
+    "mcp-auth-scaffold": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc && node scripts/copy-templates.mjs",
+    "dev": "tsc --watch",
+    "test": "npm run build && node --test ./test/scaffold.test.mjs"
+  },
+  "keywords": [
+    "azure-functions",
+    "mcp",
+    "entra-id",
+    "oauth",
+    "scaffold"
+  ],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "commander": "^14.0.3",
+    "prompts": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "@types/prompts": "^2.4.9",
+    "typescript": "^6.0.3"
+  }
+}

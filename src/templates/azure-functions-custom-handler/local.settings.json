@@ -1,0 +1,12 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "custom",
+    "AZURE_TENANT_ID": "{{TENANT_ID}}",
+    "AZURE_CLIENT_ID": "{{CLIENT_ID}}",
+    "AZURE_AUDIENCE": "{{AUDIENCE}}",
+    "AZURE_SCOPE": "{{SCOPE}}",
+    "MCP_BASE_PATH": "{{BASE_PATH}}",
+    "SERVER_NAME": "{{SERVER_NAME}}"
+  }
+}
