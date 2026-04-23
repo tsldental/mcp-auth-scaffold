@@ -9,7 +9,7 @@
   "scripts": {
     "build": "tsc && node scripts/copy-templates.mjs",
     "dev": "tsc --watch",
-    "test": "npm run build && node --test ./test/scaffold.test.mjs"
+    "test": "npm run build && node --test ./test/scaffold.test.mjs ./test/verify.test.mjs"
   },
   "keywords": [
     "azure-functions",

@@ -15,6 +15,7 @@ export interface AppConfig {
   authorizationEndpoint: string;
   tokenEndpoint: string;
   jwksUri: string;
+  codeChallengeMethodsSupported: string[];
 }
 
 export function loadConfig(): AppConfig {
@@ -41,6 +42,7 @@ export function loadConfig(): AppConfig {
       process.env.AZURE_AUTHORIZATION_ENDPOINT ?? `${loginBaseUrl}/oauth2/v2.0/authorize`,
     tokenEndpoint: process.env.AZURE_TOKEN_ENDPOINT ?? `${loginBaseUrl}/oauth2/v2.0/token`,
     jwksUri: process.env.AZURE_JWKS_URI ?? `${loginBaseUrl}/discovery/v2.0/keys`,
+    codeChallengeMethodsSupported: ["S256"],
   };
 }
 

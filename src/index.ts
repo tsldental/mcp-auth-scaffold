@@ -2,6 +2,7 @@
 
 import { Command } from "commander";
 import { registerInitCommand } from "./commands/init";
+import { registerVerifyCommand } from "./commands/verify";
 
 const program = new Command();
 
@@ -11,6 +12,7 @@ program
   .version("0.1.0");
 
 registerInitCommand(program);
+registerVerifyCommand(program);
 
 program.parseAsync(process.argv).catch((error: unknown) => {
   const message = error instanceof Error ? error.message : "Unexpected scaffold failure.";

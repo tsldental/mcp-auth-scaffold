@@ -141,6 +141,21 @@ For non-interactive generation:
 node dist/index.js init D:\my-secure-mcp-server --yes --skip-install
 ```
 
+### Verify a running server
+
+```bash
+node dist/index.js verify http://localhost:7071
+```
+
+That command checks:
+
+- `/.well-known/oauth-protected-resource`
+- `/.well-known/oauth-authorization-server`
+- unauthenticated `POST /mcp`
+- unauthenticated `GET /api/sample-status`
+
+and tells you whether the expected discovery and `401` challenge behavior is present.
+
 ## Prompts captured by `init`
 
 The CLI asks for the minimum set of auth values needed to scaffold the server:
@@ -237,6 +252,17 @@ You still need to:
 5. configure the same values in Azure Functions when you deploy
 
 The goal is to generate the code correctly while keeping Azure-side TODOs explicit.
+
+### Practical Azure Portal checklist
+
+For a real tenant, the fastest path is:
+
+1. create or reuse an Entra app registration for the MCP server
+2. set **Application ID URI** to the same value as `AZURE_AUDIENCE`
+3. expose a scope or app role that matches `AZURE_SCOPE`
+4. register the calling client application if needed
+5. grant consent for that client to request the exposed scope
+6. copy the same values into the Azure Functions app settings in Azure
 
 ## Scripts
 

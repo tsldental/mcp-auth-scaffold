@@ -27,6 +27,7 @@ export function getProtectedResourceMetadataUrl(req: Request): string {
 
 function buildAuthenticateHeader(req: Request, config: AppConfig, description?: string): string {
   const attributes = [
+    `realm="${escapeHeaderValue(config.serverName)}"`,
     `resource_metadata="${escapeHeaderValue(getProtectedResourceMetadataUrl(req))}"`,
     `authorization_uri="${escapeHeaderValue(config.authorizationEndpoint)}"`,
     `resource="${escapeHeaderValue(config.audience)}"`,

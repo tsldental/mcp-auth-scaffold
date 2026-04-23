@@ -35,14 +35,20 @@ test("init generates a secure Azure Functions MCP scaffold", () => {
       path.join(outputDirectory, "local.settings.json"),
       "utf8",
     );
+    const generatedPrm = readFileSync(path.join(outputDirectory, "src", "auth", "prm.ts"), "utf8");
+    const generatedConfig = readFileSync(path.join(outputDirectory, "src", "config.ts"), "utf8");
 
     assert.equal(existsSync(path.join(outputDirectory, "host.json")), true);
     assert.equal(existsSync(path.join(outputDirectory, "function-route", "function.json")), true);
     assert.match(generatedIndex, /\.well-known\/oauth-protected-resource/);
     assert.match(generatedChallenge, /WWW-Authenticate/);
+    assert.match(generatedChallenge, /realm=/);
     assert.match(generatedIndex, /get-ski-conditions/);
     assert.match(generatedReadme, /MCP-AgentXRay/);
+    assert.match(generatedReadme, /node dist\/index\.js verify http:\/\/localhost:7071/);
     assert.match(generatedLocalSettings, /AZURE_TENANT_ID/);
+    assert.match(generatedPrm, /code_challenge_methods_supported/);
+    assert.match(generatedConfig, /codeChallengeMethodsSupported/);
   } finally {
     rmSync(tempRoot, { recursive: true, force: true });
   }

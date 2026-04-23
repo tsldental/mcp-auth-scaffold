@@ -30,25 +30,32 @@ npm install
 4. The MCP endpoint will be available through Azure Functions at:
 
    ```text
-   http://localhost:7071{{MCP_ROUTE}}
+    http://localhost:7071{{MCP_ROUTE}}
+    ```
+
+5. From the `mcp-auth-scaffold` repo, you can verify the unauthenticated handshake shape with:
+
+   ```bash
+   node dist/index.js verify http://localhost:7071
    ```
 
 ## Required Azure / Entra setup
 
 You still need to finish the tenant-side configuration that only Azure can perform:
 
-1. Register or reuse an Entra application for this protected resource.
-2. Set the Application ID URI to match `AZURE_AUDIENCE`.
-3. Expose the `AZURE_SCOPE` scope or an equivalent app role.
-4. Grant consent to the client application or test client that will call this server.
-5. Configure the same app settings in Azure Functions when you deploy.
+1. Open **Microsoft Entra ID** and register or reuse an application for this protected resource.
+2. Under **Expose an API**, set the Application ID URI to match `AZURE_AUDIENCE`.
+3. Create the delegated scope or app role named `AZURE_SCOPE`.
+4. Register or identify the client application that will call the MCP server.
+5. Grant tenant consent so the client can request that scope.
+6. Copy the same values into Azure Functions app settings when you deploy.
 
 ## Auth handshake behavior
 
 When a request hits `{{MCP_ROUTE}}` without a valid bearer token, the server returns:
 
 - `401 Unauthorized`
-- `WWW-Authenticate: Bearer ...`
+- `WWW-Authenticate: Bearer realm="...", ...`
 - `resource_metadata="https://<host>/.well-known/oauth-protected-resource"`
 
 That allows MCP-aware clients to discover how to obtain an Entra token before retrying the request.

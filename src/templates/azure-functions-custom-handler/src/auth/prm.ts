@@ -1,9 +1,11 @@
 import type { Request } from "express";
 import type { AppConfig } from "../config.js";
 
-export function buildProtectedResourceMetadata(_req: Request, config: AppConfig) {
+export function buildProtectedResourceMetadata(req: Request, config: AppConfig) {
+  const origin = `${req.protocol}://${req.get("host")}`;
+
   return {
-    resource: config.audience,
+    resource: `${origin}${config.mcpRoute}`,
     authorization_servers: [config.issuer],
     scopes_supported: [config.scope],
     bearer_methods_supported: ["header"],
@@ -20,6 +22,7 @@ export function buildAuthorizationServerMetadata(config: AppConfig) {
     response_types_supported: ["code"],
     grant_types_supported: ["authorization_code", "client_credentials", "refresh_token"],
     token_endpoint_auth_methods_supported: ["private_key_jwt", "client_secret_post", "none"],
+    code_challenge_methods_supported: config.codeChallengeMethodsSupported,
     scopes_supported: [config.scope],
   };
 }
